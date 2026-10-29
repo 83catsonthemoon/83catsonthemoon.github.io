@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#b7c3d2">
+  <title>Liquid Ass | Liquid Glass 005</title>
+  <style>
+    :root {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      color: #263449;
+      background: #b7c3d2;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { touch-action: none; overscroll-behavior: none; user-select: none; }
+    .stage { position: fixed; inset: 0; overflow: hidden; background: #aab9cd; }
+    #optics { width: 100%; height: 100%; display: block; pointer-events: none; }
+    .fallback {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font: 900 clamp(60px, 16vw, 230px)/1 ui-rounded, system-ui, sans-serif;
+      letter-spacing: 0;
+      white-space: nowrap;
+      color: rgba(255,255,255,.08);
+      -webkit-text-stroke: 2px rgba(255,255,255,.6);
+      text-shadow: 2px 3px 2px rgba(54,64,84,.2), -2px -2px 2px rgba(255,255,255,.85);
+      will-change: transform;
+    }
+    .fallback.visible { display: block; }
+    .interface {
+      position: absolute; z-index: 2; pointer-events: none;
+      font-size: 10px; font-weight: 650; line-height: 1.8;
+      letter-spacing: .19em; text-transform: uppercase;
+      color: rgba(31,45,67,.53);
+      text-shadow: 0 1px 1px rgba(255,255,255,.25);
+    }
+    .interface strong { color: rgba(30,43,65,.82); display: block; font-size: 11px; }
+    .top-left { top: 31px; left: 36px; }
+    .top-right { top: 31px; right: 36px; text-align: right; }
+    .bottom-left { bottom: 31px; left: 36px; }
+    .bottom-right { bottom: 31px; right: 36px; text-align: right; }
+    .hint {
+      position: absolute; z-index: 2; bottom: 29px; left: 50%;
+      transform: translateX(-50%); pointer-events: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 17px;
+      border: 1px solid rgba(255,255,255,.62);
+      border-radius: 99px;
+      background: rgba(239,246,255,.35);
+      box-shadow: 0 5px 22px rgba(66,80,103,.09), inset 0 1px 0 #ffffff88;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #33445c;
+      white-space: nowrap; font-size: 10px;
+      font-weight: 700; letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .hint svg { width: 16px; height: 16px; flex: none; }
+    @media(max-width: 650px) {
+      .top-left { top: 22px; left: 21px; }
+      .top-right { top: 22px; right: 21px; }
+      .bottom-left, .bottom-right { display: none; }
+      .hint { bottom: max(19px, env(safe-area-inset-bottom)); }
+    }
+    .controls {
+      position: absolute; z-index: 5; top: 92px; right: 30px;
+      width: min(264px, calc(100vw - 40px)); padding: 16px 18px;
+      border: 1px solid rgba(255,255,255,.75); border-radius: 18px;
+      background: rgba(239,246,255,.57); backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px); box-shadow: 0 8px 30px #46557120;
+      touch-action: auto; user-select: auto;
+    }
+    .controls label { display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; font-weight: 650; color: #293e59; margin-bottom: 6px; }
+    .controls output { font-variant-numeric: tabular-nums; color: #4f6786; }
+    .controls input { width: 100%; accent-color: #597cbb; cursor: pointer; margin: 2px 0 14px; }
+    .controls input:last-child { margin-bottom: 0; }
+    @media(max-width: 650px) {
+      .controls { top: 75px; right: 16px; width: min(220px, calc(100vw - 32px)); padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" id="stage" aria-label="Two-axis liquid glass cheeky silhouette experiment">
+    <canvas id="optics" aria-hidden="true"></canvas>
+    <div class="fallback" id="fallback" role="img" aria-label="Abstract liquid-glass cheeky silhouette">🍑</div>
+    <div class="interface top-left"><strong>Liquid / Glass</strong>Cheeky Study 005</div>
+    <div class="interface top-right"><strong>Clear Material</strong>Abstract Silhouette</div>
+    <div class="interface bottom-left">Geometry-driven optics<br>Independent X / Y momentum</div>
+    <div class="interface bottom-right">Slightly clearer glass / Specular rims<br>Traveling soft-body waves</div>
+    <section class="controls" aria-label="Physics controls">
+      <label for="duration">Duration <output id="duration-value" for="duration">6.0 s</output></label>
+      <input id="duration" type="range" min="0.5" max="10" step="0.5" value="6">
+      <label for="jiggliness">Jiggliness <output id="jiggliness-value" for="jiggliness">100%</output></label>
+      <input id="jiggliness" type="range" min="0" max="250" step="5" value="100">
+      <label for="decay">Wave decay <output id="decay-value" for="decay">100%</output></label>
+      <input id="decay" type="range" min="0" max="200" step="5" value="100">
+    </section>
+    <div class="hint" aria-hidden="true">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 2v16M2 10h16M7 5l3-3 3 3M7 15l3 3 3-3M5 7l-3 3 3 3M15 7l3 3-3 3"/>
+      </svg>
+      Scroll / Drag to deform
+    </div>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+
+      const stage = document.getElementById('stage');
+      let canvas = document.getElementById('optics');
+      const fallback = document.getElementById('fallback');
+      const gl = canvas.getContext('webgl2', {
+        alpha: false, antialias: false, preserveDrawingBuffer: true
+      });
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const MASK_WIDTH = 960;
+      const MASK_HEIGHT = 300;
+      const controls = document.querySelector('.controls');
+      const durationSlider = document.getElementById('duration');
+      const jigglinessSlider = document.getElementById('jiggliness');
+      const decaySlider = document.getElementById('decay');
+      const settings = { durationMs: 6000, jiggliness: 1, waveDecay: 1 };
+      let interactionPoint = { x: 0, y: 0 };
+      const motion = {
+        x: 0, y: 0, vx: 0, vy: 0,
+        squashX: 0, squashY: 0, squashVx: 0, squashVy: 0,
+        lastInput: performance.now(), lastFrame: performance.now()
+      };
+      const pointers = new Map();
+      const waves = [];
+      const MAX_WAVES = 3;
+      let waveClock = performance.now();
+
+      function emitWave(dx, dy, strength = 1, pointX = width * .5, pointY = height * .5) {
+        if (settings.jiggliness <= 0) return;
+        const magnitude = Math.hypot(dx, dy);
+        if (magnitude < 1) return;
+        const now = performance.now();
+        const directionX = dx / magnitude;
+        const directionY = dy / magnitude;
+        const impulse = clamp(magnitude / 115 * strength, .12, 1.4) * settings.jiggliness;
+        const originX = clamp((pointX - (width * .5 + motion.x)) / Math.max(1, wordWidth * .5), -1, 1);
+        const originY = clamp((pointY - (height * .5 + motion.y)) / Math.max(1, wordHeight * .5), -1, 1);
+        if (waves.length && now - waves[waves.length - 1].start < 75) {
+          const recent = waves[waves.length - 1];
+          recent.dx = directionX;
+          recent.dy = directionY;
+          recent.amp = Math.max(recent.amp, impulse);
+          recent.ox = originX;
+          recent.oy = originY;
+          recent.start = now;
+        } else {
+          waves.push({ dx: directionX, dy: directionY, amp: impulse, ox: originX, oy: originY, start: now });
+          if (waves.length > MAX_WAVES) waves.shift();
+        }
+      }
+
+      function getWaveData(now) {
+        const life = Math.max(.45, settings.durationMs / 1000);
+        return waves.filter(wave => now - wave.start < Math.min(life, 4.5) * 1000)
+          .map(wave => ({ ...wave, age: (now - wave.start) / 1000 }));
+      }
+      const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
+      let frame = 0;
+      let width = 0;
+      let height = 0;
+      let wordWidth = 0;
+      let wordHeight = 0;
+      let inkRatio = .82;
+      let gpu = null;
+      let cpu = null;
+      let frameCount = 0;
+
+      // This one-dimensional squared Euclidean distance transform is applied to both axes.
+      // The resulting signed-distance field keeps lens normals attached to the letter contours.
+      function distanceTransform(values, length) {
+        const indices = new Int32Array(length);
+        const intersections = new Float64Array(length + 1);
+        const result = new Float32Array(length);
+        let count = 0;
+        indices[0] = 0;
+        intersections[0] = -1e20;
+        intersections[1] = 1e20;
+        for (let q = 1; q < length; q++) {
+          let crossing;
+          do {
+            const previous = indices[count];
+            crossing = ((values[q] + q * q) -
+              (values[previous] + previous * previous)) / (2 * (q - previous));
+            if (crossing <= intersections[count]) count--;
+          } while (count >= 0 && crossing <= intersections[count]);
+          count++;
+          indices[count] = q;
+          intersections[count] = crossing;
+          intersections[count + 1] = 1e20;
+        }
+        count = 0;
+        for (let q = 0; q < length; q++) {
+          while (intersections[count + 1] < q) count++;
+          const distance = q - indices[count];
+          result[q] = distance * distance + values[indices[count]];
+        }
+        return result;
+      }
+
+      function squaredDistances(binary, target) {
+        const temporary = new Float32Array(MASK_WIDTH * MASK_HEIGHT);
+        const result = new Float32Array(temporary.length);
+        const column = new Float64Array(MASK_HEIGHT);
+        const row = new Float64Array(MASK_WIDTH);
+        for (let x = 0; x < MASK_WIDTH; x++) {
+          for (let y = 0; y < MASK_HEIGHT; y++) {
+            column[y] = binary[y * MASK_WIDTH + x] === target ? 0 : 1e9;
+          }
+          const distances = distanceTransform(column, MASK_HEIGHT);
+          for (let y = 0; y < MASK_HEIGHT; y++) {
+            temporary[y * MASK_WIDTH + x] = distances[y];
+          }
+        }
+        for (let y = 0; y < MASK_HEIGHT; y++) {
+          for (let x = 0; x < MASK_WIDTH; x++) row[x] = temporary[y * MASK_WIDTH + x];
+          const distances = distanceTransform(row, MASK_WIDTH);
+          result.set(distances, y * MASK_WIDTH);
+        }
+        return result;
+      }
+
+      function drawCheekMask(context) {
+        // A rounded, abstract silhouette: intentionally cheeky, but still soft and tasteful.
+        context.save();
+        context.translate(MASK_WIDTH * .5, MASK_HEIGHT * .54);
+        context.beginPath();
+        context.moveTo(0, -88);
+        context.bezierCurveTo(54, -138, 154, -134, 193, -34);
+        context.bezierCurveTo(220, 36, 197, 146, 114, 179);
+        context.bezierCurveTo(57, 203, 18, 164, 9, 108);
+        context.bezierCurveTo(5, 83, 3, 61, 0, 43);
+        context.bezierCurveTo(-3, 61, -5, 83, -9, 108);
+        context.bezierCurveTo(-18, 164, -57, 203, -114, 179);
+        context.bezierCurveTo(-197, 146, -220, 36, -193, -34);
+        context.bezierCurveTo(-154, -134, -54, -138, 0, -88);
+        context.closePath();
+        context.fill();
+        // A narrow central cleft. Small enough to stay abstract; deep enough to read as the joke.
+        context.globalCompositeOperation = 'destination-out';
+        context.beginPath();
+        context.moveTo(0, -48);
+        context.bezierCurveTo(-9, -18, -8, 34, -2, 78);
+        context.bezierCurveTo(-1, 96, -1, 118, 0, 140);
+        context.bezierCurveTo(1, 118, 1, 96, 2, 78);
+        context.bezierCurveTo(8, 34, 9, -18, 0, -48);
+        context.closePath();
+        context.fill();
+        // Small lower notch so the silhouette reads more as a form than as a peach icon.
+        context.beginPath();
+        context.moveTo(-28, 156);
+        context.quadraticCurveTo(0, 128, 28, 156);
+        context.quadraticCurveTo(0, 183, -28, 156);
+        context.closePath();
+        context.fill();
+        context.restore();
+      }
+
+      function makeSignedDistanceField() {
+        const maskCanvas = document.createElement('canvas');
+        maskCanvas.width = MASK_WIDTH;
+        maskCanvas.height = MASK_HEIGHT;
+        const context = maskCanvas.getContext('2d', { willReadFrequently: true });
+        context.fillStyle = '#fff';
+        drawCheekMask(context);
+        const pixels = context.getImageData(0, 0, MASK_WIDTH, MASK_HEIGHT).data;
+        const binary = new Uint8Array(MASK_WIDTH * MASK_HEIGHT);
+        let minX = MASK_WIDTH, maxX = 0;
+        for (let i = 0; i < binary.length; i++) {
+          const filled = pixels[i * 4 + 3] >= 115;
+          binary[i] = filled ? 1 : 0;
+          if (filled) {
+            const x = i % MASK_WIDTH;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+          }
+        }
+        inkRatio = maxX > minX ? Math.min(1, (maxX - minX + 1) / MASK_WIDTH) : .45;
+        const inside = squaredDistances(binary, 1);
+        const outside = squaredDistances(binary, 0);
+        const encoded = new Uint8Array(binary.length);
+        for (let i = 0; i < encoded.length; i++) {
+          const signed = Math.sqrt(outside[i]) - Math.sqrt(inside[i]);
+          encoded[i] = Math.round(255 * clamp(.5 + signed / 64, 0, 1));
+        }
+        return encoded;
+      }
+
+      const vertexSource = `#version 300 es
+      precision highp float;
+      void main() {
+        vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+        gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+      }`;
+
+      const fragmentSource = `#version 300 es
+      precision highp float;
+      uniform sampler2D uBackdrop;
+      uniform sampler2D uSignedDistance;
+      uniform vec2 uResolution;
+      uniform vec2 uCenter;
+      uniform vec2 uWordSize;
+      uniform vec4 uShape;
+      uniform vec2 uRipple;
+      uniform float uAngle;
+      uniform float uPhase;
+      uniform float uDpr;
+      uniform vec4 uWaves[3];
+      uniform vec2 uWaveOrigins[3];
+      uniform vec3 uWaveAges;
+      uniform float uWaveLife;
+      uniform float uWaveDecay;
+      out vec4 outColor;
+
+      vec2 localCoordinates(vec2 pixel) {
+        float c = cos(uAngle), s = sin(uAngle);
+        mat2 rotation = mat2(c, s, -s, c);
+        mat2 skew = mat2(1.0, uShape.w, uShape.z, 1.0);
+        mat2 scale = mat2(uShape.x, 0.0, 0.0, uShape.y);
+        vec2 q = inverse(rotation * skew * scale) * (pixel - uCenter);
+        // Moving wavefronts traverse the gel with local, delayed displacement.
+        // This is a field deformation, not a skew/rotation of a flat shape.
+        vec2 normalized = q / (uWordSize * 0.5);
+        vec2 displacement = vec2(0.0);
+        for (int i = 0; i < 3; i++) {
+          vec4 wave = uWaves[i];
+          vec2 origin = uWaveOrigins[i];
+          float age = uWaveAges[i];
+          if (wave.z <= 0.0 || age < 0.0) continue;
+          vec2 direction = normalize(wave.xy + vec2(.00001));
+          vec2 fromOrigin = normalized - origin;
+          float axis = dot(fromOrigin, direction);
+          float transverse = dot(fromOrigin, vec2(-direction.y, direction.x));
+          float front = age * 3.1;
+          float distance = axis - front;
+          float packet = exp(-distance * distance * 5.8) * exp(-age * (2.8 / uWaveLife));
+          float oscillation = cos(distance * 7.0);
+          float widthEnvelope = exp(-transverse * transverse * 0.85);
+          float travel = max(axis, 0.0);
+          float spatialDecay = exp(-travel * mix(0.18, 2.6, clamp(uWaveDecay, 0.0, 2.0)));
+          float radialDecay = exp(-length(fromOrigin) * mix(0.08, 1.4, clamp(uWaveDecay, 0.0, 2.0)));
+          float amplitude = wave.z * packet * oscillation * widthEnvelope * spatialDecay * radialDecay;
+          // A compression pulse followed by a transverse wobble.
+          displacement += direction * amplitude * 21.0;
+          displacement += vec2(-direction.y, direction.x) * amplitude *
+            sin(transverse * 4.5 + distance * 2.0) * 8.0;
+        }
+        q += displacement;
+        return q;
+      }
+
+      float distanceAt(vec2 pixel) {
+        vec2 uv = localCoordinates(pixel) / uWordSize + .5;
+        if (uv.x <= 0.0 || uv.y <= 0.0 || uv.x >= 1.0 || uv.y >= 1.0) return -32.0;
+        return (texture(uSignedDistance, uv).r - .5) * 64.0;
+      }
+
+      vec3 backdrop(vec2 pixel) {
+        vec2 uv = clamp(pixel / uResolution, vec2(0.001), vec2(0.999));
+        return texture(uBackdrop, vec2(uv.x, 1.0 - uv.y)).rgb;
+      }
+
+      void main() {
+        vec2 pixel = vec2(gl_FragCoord.x / uDpr, uResolution.y - gl_FragCoord.y / uDpr);
+        vec3 base = backdrop(pixel);
+        float d = distanceAt(pixel);
+        if (d < -18.0) { outColor = vec4(base, 1.0); return; }
+
+        float inside = smoothstep(-1.15, 1.3, d);
+        float dx = distanceAt(pixel + vec2(1.3, 0.0)) -
+                   distanceAt(pixel - vec2(1.3, 0.0));
+        float dy = distanceAt(pixel + vec2(0.0, 1.3)) -
+                   distanceAt(pixel - vec2(0.0, 1.3));
+        vec2 normal = normalize(vec2(dx, dy) + vec2(0.00001));
+        float distInside = max(d, 0.0);
+        float edgeLens = 10.5 * exp(-distInside / 7.5);
+        float innerLens = 1.4 * smoothstep(1.0, 16.0, d);
+        float deformation = 1.0 + min(length(uRipple) * 1.5, .35);
+        vec2 offset = normal * (edgeLens + innerLens) * deformation;
+        offset += uRipple * 3.3 * smoothstep(0.0, 8.0, d);
+        offset *= inside;
+
+        // Refract each RGB channel at a slightly different position (subtle dispersion).
+        vec3 refracted = vec3(
+          backdrop(pixel + offset * 1.06 + normal * .5).r,
+          backdrop(pixel + offset).g,
+          backdrop(pixel + offset * .94 - normal * .5).b
+        );
+        vec3 color = mix(base, refracted, inside);
+        float rim = exp(-pow(d / 2.8, 2.0));
+        vec2 light = normalize(vec2(-.53 + uRipple.x * .10, -.85 + uRipple.y * .10));
+        float facing = max(dot(normal, light), 0.0);
+        float opposite = max(dot(normal, -light), 0.0);
+        float specular = rim * (.12 + .66 * pow(facing, 2.1));
+        // Slightly opalescent glass. The backdrop remains visible through the glyphs.
+        float bodyTint = inside * (.118 + .038 * exp(-distInside / 15.0));
+        color = mix(color, vec3(.91, .963, 1.0), bodyTint);
+        float internalSheen = inside * (.038 + .014 * sin(pixel.x * .014 + uPhase * .25));
+        float shadow = (1.0 - inside) * exp(-max(-d, 0.0) / 8.0) * .17;
+        color *= 1.0 - shadow;
+        color = mix(color, vec3(.98, .995, 1.0), specular + internalSheen);
+        color -= vec3(.075, .080, .092) * opposite * rim * .67;
+        outColor = vec4(clamp(color, 0.0, 1.0), 1.0);
+      }`;
+
+      function shader(type, source) {
+        const created = gl.createShader(type);
+        gl.shaderSource(created, source);
+        gl.compileShader(created);
+        if (!gl.getShaderParameter(created, gl.COMPILE_STATUS)) {
+          throw new Error(gl.getShaderInfoLog(created));
+        }
+        return created;
+      }
+
+      function initWebGL() {
+        if (!gl) return false;
+        try {
+          const program = gl.createProgram();
+          const vs = shader(gl.VERTEX_SHADER, vertexSource);
+          const fs = shader(gl.FRAGMENT_SHADER, fragmentSource);
+          gl.attachShader(program, vs);
+          gl.attachShader(program, fs);
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            throw new Error(gl.getProgramInfoLog(program));
+          }
+          gl.deleteShader(vs);
+          gl.deleteShader(fs);
+          gl.useProgram(program);
+          const uniforms = {};
+          for (const name of ['uBackdrop', 'uSignedDistance', 'uResolution', 'uCenter',
+            'uWordSize', 'uShape', 'uRipple', 'uAngle', 'uPhase', 'uDpr',
+            'uWaves[0]', 'uWaveOrigins[0]', 'uWaveAges', 'uWaveLife', 'uWaveDecay']) {
+            uniforms[name] = gl.getUniformLocation(program, name);
+          }
+          const backdropTexture = gl.createTexture();
+          const sdfTexture = gl.createTexture();
+          for (const texture of [backdropTexture, sdfTexture]) {
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          }
+          gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+          gl.activeTexture(gl.TEXTURE1);
+          gl.bindTexture(gl.TEXTURE_2D, sdfTexture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8, MASK_WIDTH, MASK_HEIGHT,
+            0, gl.RED, gl.UNSIGNED_BYTE, makeSignedDistanceField());
+          gl.uniform1i(uniforms.uBackdrop, 0);
+          gl.uniform1i(uniforms.uSignedDistance, 1);
+          gpu = { program, uniforms, backdropTexture, sdfTexture, dpr: 1 };
+          return true;
+        } catch (error) {
+          console.error('WebGL optics unavailable, using CSS fallback:', error);
+          return false;
+        }
+      }
+
+      function drawBackground(ctx, w, h) {
+        const base = ctx.createLinearGradient(0, 0, w, h);
+        base.addColorStop(0, '#c7d2e1');
+        base.addColorStop(.46, '#aab8cb');
+        base.addColorStop(1, '#d9d4dd');
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, w, h);
+
+        function glow(x, y, radius, center, fade) {
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+          gradient.addColorStop(0, center);
+          gradient.addColorStop(1, fade);
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+        }
+        glow(w * .18, h * .22, Math.max(w, h) * .56, '#ecf7f9c0', '#ecf7f900');
+        glow(w * .72, h * .74, Math.max(w, h) * .55, '#a69dd376', '#a69dd300');
+        glow(w * .58, h * .35, Math.max(w, h) * .42, '#dce9ffc0', '#dce9ff00');
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(44,68,100,.13)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= w; x += 56) {
+          ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 56) {
+          ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(w, y + .5); ctx.stroke();
+        }
+        ctx.restore();
+
+        const stripe = ctx.createLinearGradient(w * .08, 0, w * .94, h);
+        stripe.addColorStop(0, '#f8b7b3a6');
+        stripe.addColorStop(.25, '#efddfac4');
+        stripe.addColorStop(.5, '#a0d5e4c0');
+        stripe.addColorStop(.72, '#b7abedab');
+        stripe.addColorStop(1, '#f0d4aec2');
+        ctx.beginPath();
+        ctx.moveTo(-.2 * w, .42 * h);
+        ctx.bezierCurveTo(.17 * w, .82 * h, .30 * w, .11 * h, .55 * w, .45 * h);
+        ctx.bezierCurveTo(.75 * w, .75 * h, .88 * w, .35 * h, 1.2 * w, .57 * h);
+        ctx.lineWidth = Math.min(85, Math.max(32, h * .12));
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = stripe;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(-.2 * w, .42 * h - 2);
+        ctx.bezierCurveTo(.17 * w, .82 * h - 2, .30 * w, .11 * h - 2, .55 * w, .45 * h - 2);
+        ctx.bezierCurveTo(.75 * w, .75 * h - 2, .88 * w, .35 * h - 2, 1.2 * w, .57 * h - 2);
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = '#ffffffa2';
+        ctx.stroke();
+
+        function circle(x, y, radius, tint) {
+          const ring = ctx.createRadialGradient(x - radius * .3, y - radius * .35, 2,
+            x, y, radius);
+          ring.addColorStop(0, '#ffffff72');
+          ring.addColorStop(.58, tint);
+          ring.addColorStop(1, '#ffffff09');
+          ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = ring; ctx.fill();
+          ctx.strokeStyle = '#ffffffa2'; ctx.lineWidth = 1.25; ctx.stroke();
+          ctx.beginPath(); ctx.arc(x - radius * .1, y - radius * .1, radius * .78,
+            Math.PI * 1.07, Math.PI * 1.65);
+          ctx.strokeStyle = '#ffffff91'; ctx.lineWidth = 2.5; ctx.stroke();
+        }
+        circle(w * .13, h * .30, Math.min(w, h) * .135, '#d7edf872');
+        circle(w * .83, h * .73, Math.min(w, h) * .16, '#ded0ef75');
+
+        ctx.save();
+        ctx.globalAlpha = .52;
+        ctx.lineWidth = 2;
+        for (let i = -2; i <= 2; i++) {
+          ctx.beginPath();
+          ctx.moveTo(w * .09, h * (.55 + i * .024));
+          ctx.bezierCurveTo(w * .36, h * (.43 + i * .026),
+            w * .62, h * (.57 + i * .025), w * .93, h * (.46 + i * .03));
+          ctx.strokeStyle = i % 2 ? '#eff7ff' : '#526d96';
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function initCanvasFallback() {
+        // WebGL may be disabled by browser policy or hardware. Keep the actual lensing
+        // effect by rasterizing the same distance-field optics with the 2D canvas API.
+        if (gl) {
+          const replacement = document.createElement('canvas');
+          replacement.id = 'optics';
+          replacement.setAttribute('aria-hidden', 'true');
+          canvas.replaceWith(replacement);
+          canvas = replacement;
+        }
+        const context = canvas.getContext('2d', { alpha: false, willReadFrequently: true });
+        if (!context) return false;
+        cpu = { context, mask: makeSignedDistanceField(), background: null,
+          pixelWidth: 0, pixelHeight: 0, scaleX: 1, scaleY: 1 };
+        return true;
+      }
+
+      function cpuSurface(px, py, shape, surface) {
+        // Sample the deforming signed-distance field once, and derive its surface
+        // normal analytically. The local warp is intentionally non-linear so the
+        // silhouette feels gelatinous rather than like a flat card in perspective.
+        const dx = px - width * .5 - motion.x;
+        const dy = py - height * .5 - motion.y;
+        let localX = (shape.d * dx - shape.c * dy) / shape.det;
+        let localY = (-shape.b * dx + shape.a * dy) / shape.det;
+        const normalizedX = localX / (wordWidth * .5);
+        const normalizedY = localY / (wordHeight * .5);
+        const envelopeX = Math.max(0, 1 - normalizedX * normalizedX);
+        const envelopeY = Math.max(0, 1 - normalizedY * normalizedY);
+        const smooth = (start, end, value) => {
+          const t = clamp((value - start) / (end - start), 0, 1);
+          return t * t * (3 - 2 * t);
+        };
+        const leftRightBias = smooth(-0.55, -0.02, normalizedX) - smooth(0.02, 0.55, normalizedX);
+        let waveOffsetX = 0;
+        let waveOffsetY = 0;
+        for (const wave of shape.waves) {
+          const localXFromOrigin = normalizedX - wave.ox;
+          const localYFromOrigin = normalizedY - wave.oy;
+          const axis = localXFromOrigin * wave.dx + localYFromOrigin * wave.dy;
+          const transverse = -localXFromOrigin * wave.dy + localYFromOrigin * wave.dx;
+          const distance = axis - (wave.age * 3.1);
+          const packet = Math.exp(-distance * distance * 5.8) *
+            Math.exp(-wave.age * (2.8 / shape.waveLife));
+          const travel = Math.max(axis, 0);
+          const decayFactor = Math.max(0, Math.min(shape.waveDecay, 2));
+          const spatialDecay = Math.exp(-travel * (0.18 + (2.6 - 0.18) * decayFactor / 2));
+          const radialDecay = Math.exp(-Math.hypot(localXFromOrigin, localYFromOrigin) * (0.08 + (1.4 - 0.08) * decayFactor / 2));
+          const amplitude = wave.amp * packet * Math.cos(distance * 7) *
+            Math.exp(-transverse * transverse * .85) * spatialDecay * radialDecay;
+          waveOffsetX += wave.dx * amplitude * 21 - wave.dy * amplitude *
+            Math.sin(transverse * 4.5 + distance * 2) * 8;
+          waveOffsetY += wave.dy * amplitude * 21 + wave.dx * amplitude *
+            Math.sin(transverse * 4.5 + distance * 2) * 8;
+        }
+        localX += waveOffsetX;
+        localY += waveOffsetY;
+        const u = (localX / wordWidth + .5) * MASK_WIDTH - .5;
+        const v = (localY / wordHeight + .5) * MASK_HEIGHT - .5;
+        if (u < 0 || v < 0 || u >= MASK_WIDTH - 1 || v >= MASK_HEIGHT - 1) {
+          surface.d = -32;
+          return;
+        }
+        const x = Math.floor(u);
+        const y = Math.floor(v);
+        const fx = u - x;
+        const fy = v - y;
+        const index = y * MASK_WIDTH + x;
+        const data = cpu.mask;
+        const topLeft = data[index];
+        const topRight = data[index + 1];
+        const bottomLeft = data[index + MASK_WIDTH];
+        const bottomRight = data[index + MASK_WIDTH + 1];
+        const top = topLeft + (topRight - topLeft) * fx;
+        const bottom = bottomLeft + (bottomRight - bottomLeft) * fx;
+        surface.d = ((top + (bottom - top) * fy) / 255 - .5) * 64;
+        const gradientU = ((topRight - topLeft) * (1 - fy) +
+          (bottomRight - bottomLeft) * fy) * MASK_WIDTH / wordWidth;
+        const gradientV = ((bottomLeft - topLeft) * (1 - fx) +
+          (bottomRight - topRight) * fx) * MASK_HEIGHT / wordHeight;
+        const nx = shape.d * gradientU - shape.b * gradientV;
+        const ny = shape.a * gradientV - shape.c * gradientU;
+        const magnitude = Math.hypot(nx, ny) || 1;
+        surface.nx = nx / magnitude;
+        surface.ny = ny / magnitude;
+      }
+
+      function cpuBackdrop(x, y, channel) {
+        const px = clamp(x * cpu.scaleX, 0, cpu.pixelWidth - 1.001);
+        const py = clamp(y * cpu.scaleY, 0, cpu.pixelHeight - 1.001);
+        const ix = Math.floor(px);
+        const iy = Math.floor(py);
+        const fx = px - ix;
+        const fy = py - iy;
+        const pixels = cpu.background.data;
+        const start = (iy * cpu.pixelWidth + ix) * 4 + channel;
+        const next = Math.min(ix + 1, cpu.pixelWidth - 1) * 4 + channel;
+        const bottom = Math.min(iy + 1, cpu.pixelHeight - 1) * cpu.pixelWidth * 4;
+        const topColor = pixels[start] +
+          (pixels[iy * cpu.pixelWidth * 4 + next] - pixels[start]) * fx;
+        const bottomColor = pixels[bottom + ix * 4 + channel] +
+          (pixels[bottom + next] - pixels[bottom + ix * 4 + channel]) * fx;
+        return topColor + (bottomColor - topColor) * fy;
+      }
+
+      function cpuDraw(shape) {
+        const ctx = cpu.context;
+        ctx.drawImage(cpu.background.canvas, 0, 0);
+        const radiusX = wordWidth * .64 + wordHeight * .22 + 20;
+        const radiusY = wordHeight * .71 + wordWidth * .13 + 20;
+        const x0 = clamp(Math.floor((width * .5 + motion.x - radiusX) * cpu.scaleX),
+          0, cpu.pixelWidth - 1);
+        const y0 = clamp(Math.floor((height * .5 + motion.y - radiusY) * cpu.scaleY),
+          0, cpu.pixelHeight - 1);
+        const x1 = clamp(Math.ceil((width * .5 + motion.x + radiusX) * cpu.scaleX),
+          1, cpu.pixelWidth);
+        const y1 = clamp(Math.ceil((height * .5 + motion.y + radiusY) * cpu.scaleY),
+          1, cpu.pixelHeight);
+        const regionWidth = x1 - x0;
+        const regionHeight = y1 - y0;
+        if (regionWidth <= 0 || regionHeight <= 0) return;
+        const image = ctx.getImageData(x0, y0, regionWidth, regionHeight);
+        const pixels = image.data;
+        const s = (start, end, value) => {
+          const t = clamp((value - start) / (end - start), 0, 1);
+          return t * t * (3 - 2 * t);
+        };
+        const waveX = shape.jellyX;
+        const waveY = shape.jellyY;
+        const lightX = -.53;
+        const lightY = -.85;
+        const surface = { d: -32, nx: 0, ny: 0 };
+        for (let row = 0; row < regionHeight; row++) {
+          const py = (y0 + row + .5) / cpu.scaleY;
+          for (let col = 0; col < regionWidth; col++) {
+            const px = (x0 + col + .5) / cpu.scaleX;
+            cpuSurface(px, py, shape, surface);
+            const d = surface.d;
+            if (d < -16) continue;
+            const inside = s(-1.15, 1.3, d);
+            const nx = surface.nx;
+            const ny = surface.ny;
+            const interior = Math.max(d, 0);
+            const lens = (10.5 * Math.exp(-interior / 7.5) +
+              1.4 * s(1, 16, d)) * (1 + Math.min(Math.hypot(waveX, waveY) * 1.5, .35));
+            const refractX = nx * lens * inside + waveX * 3.3 * s(0, 8, d);
+            const refractY = ny * lens * inside + waveY * 3.3 * s(0, 8, d);
+            const ring = Math.exp(-Math.pow(d / 2.8, 2));
+            const facing = Math.max(nx * lightX + ny * lightY, 0);
+            const opposite = Math.max(-nx * lightX - ny * lightY, 0);
+            const specular = ring * (.12 + .66 * facing * facing);
+            const tint = inside * (.118 + .038 * Math.exp(-interior / 15));
+            const sheen = inside * (.038 + .014 * Math.sin(px * .014 + shape.phase * .25));
+            const shadow = (1 - inside) * Math.exp(-Math.max(-d, 0) / 8) * .17;
+            const index = (row * regionWidth + col) * 4;
+            for (let channel = 0; channel < 3; channel++) {
+              const displaced = cpuBackdrop(px + refractX + nx * (.5 - channel * .5),
+                py + refractY + ny * (.5 - channel * .5), channel);
+              let color = pixels[index + channel] * (1 - inside) + displaced * inside;
+              color = color * (1 - tint) + [232, 246, 255][channel] * tint;
+              color = color * (1 - shadow);
+              color = color * (1 - specular - sheen) + 255 * (specular + sheen);
+              color -= (channel === 2 ? 23 : 19) * opposite * ring * .67;
+              pixels[index + channel] = clamp(Math.round(color), 0, 255);
+            }
+          }
+        }
+        ctx.putImageData(image, x0, y0);
+      }
+
+      function limits() {
+        const inkWidth = wordWidth * inkRatio;
+        return {
+          x: Math.max(0, (width - inkWidth * 1.24 - wordHeight * .20) / 2 - 12),
+          y: Math.max(0, (height - wordHeight * 1.35 - inkWidth * .14) / 2 - 15)
+        };
+      }
+
+      function bounce() {
+        const bound = limits();
+        for (const axis of ['x', 'y']) {
+          if (Math.abs(motion[axis]) <= bound[axis]) continue;
+          const side = Math.sign(motion[axis]);
+          const speed = Math.abs(motion[`v${axis}`]);
+          motion[axis] = side * bound[axis];
+          motion[`v${axis}`] = speed < 11 ? 0 : -side * speed * .38;
+          if (speed >= 35 && performance.now() - motion.lastInput < 1400) {
+            emitWave(axis === 'x' ? -side * speed * .15 : 0,
+              axis === 'y' ? -side * speed * .15 : 0, .55);
+          }
+        }
+      }
+
+      function draw() {
+        const { x, y, vx, vy, squashX: sx, squashY: sy } = motion;
+        const jellyX = 0;
+        const jellyY = 0;
+        const scaleX = 1;
+        const scaleY = 1;
+        const shearX = 0;
+        const shearY = 0;
+        const angle = 0;
+        const waveData = getWaveData(performance.now());
+        const waveLife = Math.max(.45, settings.durationMs / 1000);
+        if (cpu) {
+          const cosine = Math.cos(angle);
+          const sine = Math.sin(angle);
+          const a = scaleX * (cosine - sine * shearY);
+          const b = scaleX * (sine + cosine * shearY);
+          const c = scaleY * (cosine * shearX - sine);
+          const d = scaleY * (sine * shearX + cosine);
+          cpuDraw({ a, b, c, d, det: a * d - b * c,
+            phase: x * .012 + y * .014, jellyX, jellyY,
+            waves: waveData, waveLife, waveDecay: settings.waveDecay });
+          return;
+        }
+        if (!gpu) {
+          fallback.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) ` +
+            `rotate(${angle}rad) skew(${shearX}rad, ${shearY}rad) scale(${scaleX}, ${scaleY})`;
+          return;
+        }
+        const u = gpu.uniforms;
+        gl.useProgram(gpu.program);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, gpu.backdropTexture);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, gpu.sdfTexture);
+        gl.uniform2f(u.uResolution, width, height);
+        gl.uniform2f(u.uCenter, width * .5 + x, height * .5 + y);
+        gl.uniform2f(u.uWordSize, wordWidth, wordHeight);
+        gl.uniform4f(u.uShape, scaleX, scaleY, shearX, shearY);
+        gl.uniform2f(u.uRipple, jellyX, jellyY);
+        gl.uniform1f(u.uAngle, angle);
+        gl.uniform1f(u.uPhase, x * .012 + y * .014);
+        gl.uniform1f(u.uDpr, gpu.dpr);
+        const uniforms = new Float32Array(12);
+        const origins = new Float32Array(6);
+        const ages = new Float32Array([-1, -1, -1]);
+        for (let i = 0; i < Math.min(3, waveData.length); i++) {
+          uniforms[i * 4] = waveData[i].dx;
+          uniforms[i * 4 + 1] = waveData[i].dy;
+          uniforms[i * 4 + 2] = waveData[i].amp;
+          origins[i * 2] = waveData[i].ox;
+          origins[i * 2 + 1] = waveData[i].oy;
+          ages[i] = waveData[i].age;
+        }
+        gl.uniform4fv(u['uWaves[0]'], uniforms);
+        gl.uniform2fv(u['uWaveOrigins[0]'], origins);
+        gl.uniform3fv(u.uWaveAges, ages);
+        gl.uniform1f(u.uWaveLife, waveLife);
+        gl.uniform1f(u.uWaveDecay, settings.waveDecay);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+
+      function resize() {
+        width = Math.max(1, stage.clientWidth);
+        height = Math.max(1, stage.clientHeight);
+        wordWidth = Math.min(width * .88, height * 1.53, 960);
+        wordHeight = wordWidth * MASK_HEIGHT / MASK_WIDTH;
+        if (cpu) {
+          // Limit per-pixel CPU work. WebGL uses native device resolution instead.
+          const resolutionScale = Math.min(1, 950 / width, 610 / height);
+          cpu.pixelWidth = Math.max(1, Math.round(width * resolutionScale));
+          cpu.pixelHeight = Math.max(1, Math.round(height * resolutionScale));
+          cpu.scaleX = cpu.pixelWidth / width;
+          cpu.scaleY = cpu.pixelHeight / height;
+          canvas.width = cpu.pixelWidth;
+          canvas.height = cpu.pixelHeight;
+          const backgroundCanvas = document.createElement('canvas');
+          backgroundCanvas.width = cpu.pixelWidth;
+          backgroundCanvas.height = cpu.pixelHeight;
+          const bg = backgroundCanvas.getContext('2d', { willReadFrequently: true });
+          bg.setTransform(cpu.scaleX, 0, 0, cpu.scaleY, 0, 0);
+          drawBackground(bg, width, height);
+          cpu.background = {
+            canvas: backgroundCanvas,
+            data: bg.getImageData(0, 0, cpu.pixelWidth, cpu.pixelHeight).data
+          };
+        }
+        if (gpu) {
+          gpu.dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+          canvas.width = Math.round(width * gpu.dpr);
+          canvas.height = Math.round(height * gpu.dpr);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+          const backgroundCanvas = document.createElement('canvas');
+          backgroundCanvas.width = canvas.width;
+          backgroundCanvas.height = canvas.height;
+          const ctx = backgroundCanvas.getContext('2d');
+          ctx.scale(gpu.dpr, gpu.dpr);
+          drawBackground(ctx, width, height);
+          gl.activeTexture(gl.TEXTURE0);
+          gl.bindTexture(gl.TEXTURE_2D, gpu.backdropTexture);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
+            gl.UNSIGNED_BYTE, backgroundCanvas);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        }
+        const bound = limits();
+        motion.x = clamp(motion.x, -bound.x, bound.x);
+        motion.y = clamp(motion.y, -bound.y, bound.y);
+        draw();
+      }
+
+      function schedule() {
+        if (frame || reduceMotion.matches) return;
+        frame = requestAnimationFrame(animate);
+      }
+
+      function stir(deltaX, deltaY, pointX = interactionPoint.x || width * .5, pointY = interactionPoint.y || height * .5) {
+        const dx = clamp(deltaX, -160, 160);
+        const dy = clamp(deltaY, -160, 160);
+        if (!dx && !dy) return;
+        motion.lastInput = performance.now();
+        if (!frame) motion.lastFrame = motion.lastInput;
+        motion.x += dx * .22;
+        motion.y += dy * .22;
+        if (!reduceMotion.matches) {
+          motion.vx = clamp(motion.vx + dx * 5.6, -2200, 2200);
+          motion.vy = clamp(motion.vy + dy * 5.6, -2200, 2200);
+
+        }
+        bounce();
+        if (!reduceMotion.matches) emitWave(dx, dy, 1, pointX, pointY);
+        draw();
+        schedule();
+      }
+
+      function springStep(axis, dt) {
+        // Exact damped-harmonic-oscillator integration. Its result is independent
+        // of frame rate, including very slow Canvas fallback frames.
+        const positionKey = `squash${axis}`;
+        const velocityKey = `squashV${axis.toLowerCase()}`;
+        const position = motion[positionKey];
+        const velocity = motion[velocityKey];
+        const frequency = Math.sqrt(155);
+        const dampingRatio = clamp(0.62 * Math.sqrt(6000 / settings.durationMs), .32, .95);
+        const decayRate = frequency * dampingRatio;
+        const oscillation = frequency * Math.sqrt(1 - dampingRatio * dampingRatio);
+        const cosine = Math.cos(oscillation * dt);
+        const sine = Math.sin(oscillation * dt);
+        const decay = Math.exp(-decayRate * dt);
+        const amplitude = (velocity + decayRate * position) / oscillation;
+        motion[positionKey] = clamp(decay * (position * cosine + amplitude * sine),
+          -.24, .24);
+        motion[velocityKey] = decay * (velocity * cosine -
+          (decayRate * velocity + frequency * frequency * position) /
+          oscillation * sine);
+      }
+
+      function animate(now) {
+        frame = 0;
+        const dt = Math.max(0, Math.min((now - motion.lastFrame) / 1000, .6));
+        motion.lastFrame = now;
+        if (reduceMotion.matches || now - motion.lastInput >= settings.durationMs) {
+          motion.vx = motion.vy = motion.squashX = motion.squashY = 0;
+          motion.squashVx = motion.squashVy = 0;
+        } else {
+          const rate = 4.2 * 6000 / settings.durationMs;
+          const friction = Math.exp(-rate * dt);
+          motion.x += motion.vx * (1 - friction) / rate;
+          motion.y += motion.vy * (1 - friction) / rate;
+          motion.vx *= friction;
+          motion.vy *= friction;
+          bounce();
+          springStep('X', dt);
+          springStep('Y', dt);
+        }
+        const wavesActive = getWaveData(now).length > 0;
+        const active = wavesActive || Math.abs(motion.vx) + Math.abs(motion.vy) > 3 ||
+          Math.abs(motion.squashX) + Math.abs(motion.squashY) > .0015 ||
+          Math.abs(motion.squashVx) + Math.abs(motion.squashVy) > .025;
+        if (active && now - motion.lastInput < settings.durationMs) {
+          draw();
+          schedule();
+        } else {
+          motion.vx = motion.vy = motion.squashX = motion.squashY = 0;
+          motion.squashVx = motion.squashVy = 0;
+          draw();
+        }
+      }
+
+      durationSlider.addEventListener('input', () => {
+        settings.durationMs = Number(durationSlider.value) * 1000;
+        document.getElementById('duration-value').textContent =
+          `${Number(durationSlider.value).toFixed(1)} s`;
+        if (frame) schedule();
+      });
+      jigglinessSlider.addEventListener('input', () => {
+        const previous = settings.jiggliness;
+        settings.jiggliness = Number(jigglinessSlider.value) / 100;
+        document.getElementById('jiggliness-value').textContent =
+          `${jigglinessSlider.value}%`;
+        const factor = previous > 0 ? settings.jiggliness / previous : 0;
+        motion.squashX *= factor;
+        motion.squashY *= factor;
+        motion.squashVx *= factor;
+        motion.squashVy *= factor;
+        draw();
+      });
+      decaySlider.addEventListener('input', () => {
+        settings.waveDecay = Number(decaySlider.value) / 100;
+        document.getElementById('decay-value').textContent =
+          `${decaySlider.value}%`;
+        draw();
+      });
+      controls.addEventListener('wheel', event => event.stopPropagation(), { passive: true });
+      controls.addEventListener('pointerdown', event => event.stopPropagation());
+      controls.addEventListener('pointermove', event => event.stopPropagation());
+      controls.addEventListener('keydown', event => event.stopPropagation());
+      stage.addEventListener('wheel', event => {
+        event.preventDefault();
+        const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? height : 1;
+        let dx = event.deltaX * unit;
+        let dy = event.deltaY * unit;
+        if (event.shiftKey && Math.abs(dx) < 1) { dx = dy; dy = 0; }
+        interactionPoint = { x: event.clientX, y: event.clientY };
+        stir(dx, dy, event.clientX, event.clientY);
+      }, { passive: false });
+      stage.addEventListener('pointerdown', event => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        interactionPoint = { x: event.clientX, y: event.clientY };
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        stage.setPointerCapture(event.pointerId);
+      });
+      stage.addEventListener('pointermove', event => {
+        const point = pointers.get(event.pointerId);
+        if (!point) return;
+        stir(event.clientX - point.x, event.clientY - point.y);
+        interactionPoint = { x: event.clientX, y: event.clientY };
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      });
+      for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+        stage.addEventListener(type, event => pointers.delete(event.pointerId));
+      }
+      window.addEventListener('keydown', event => {
+        const steps = {
+          ArrowLeft: [-38, 0], ArrowRight: [38, 0],
+          ArrowUp: [0, -38], ArrowDown: [0, 38]
+        };
+        if (!Object.hasOwn(steps, event.key)) return;
+        event.preventDefault();
+        stir(...steps[event.key]);
+      });
+      reduceMotion.addEventListener('change', () => {
+        if (reduceMotion.matches && frame) cancelAnimationFrame(frame);
+        frame = 0;
+        motion.vx = motion.vy = motion.squashX = motion.squashY = 0;
+        motion.squashVx = motion.squashVy = 0;
+        draw();
+      });
+      window.addEventListener('resize', resize);
+
+      if (initWebGL()) {
+        resize();
+      } else if (initCanvasFallback()) {
+        resize();
+      } else {
+        fallback.classList.add('visible');
+        resize();
+      }
+      window.__liquidGlassState = motion;
+      window.__liquidGlassRenderer = gpu ? 'webgl2' : cpu ? 'canvas2d' : 'css';
+    })();
+  </script>
+</body>
+</html>
